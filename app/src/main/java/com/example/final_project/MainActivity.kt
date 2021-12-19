@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var bottom_sheet:FrameLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.layout)
+        setContentView(R.layout.activity_main)
 
 
         // Dynamic load bottom sheet
