@@ -12,8 +12,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 class MainActivity : AppCompatActivity() {
 
-    var isBottomSheetLoad = false
-    
+    var isBottomSheetLoad = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
