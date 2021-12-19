@@ -3,12 +3,31 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.View
 
 class CanvasAnimation(context: Context) : View(context) {
 
     private var canvas_width:Int = 0
     private var canvas_height:Int = 0
+
+    private var circular_w_ratio = 0.5
+    private var circular_h_ratio = 0.5
+
+
+    init {
+        var task:Runnable = Runnable{
+            while(true){
+                invalidate()
+                Thread.sleep(100)
+            }
+        }
+
+        var td = Thread(task)
+        td.start()
+    }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
@@ -18,13 +37,19 @@ class CanvasAnimation(context: Context) : View(context) {
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        if(canvas != null){
 
+        if(canvas!= null){
 
+            val p = Paint()
+            p.strokeWidth = 3f
+            p.color = Color.RED
+            p.style = Paint.Style.STROKE
+
+            canvas.drawCircle(ratioToSizeW(circular_w_ratio), ratioToSizeH(circular_h_ratio), 150f, p)
         }
     }
 
-    fun ratioToSizeH(Ratio: Double):Float{
+    private fun ratioToSizeH(Ratio: Double):Float{
         var ratio:Double = Ratio
         if(ratio <0){
             ratio = 0.0
@@ -35,7 +60,7 @@ class CanvasAnimation(context: Context) : View(context) {
         return (ratio * canvas_height.toDouble()).toFloat()
     }
 
-    fun ratioToSizeW(Ratio: Double):Float{
+    private fun ratioToSizeW(Ratio: Double):Float{
         var ratio:Double = Ratio
         if(ratio <0){
             ratio = 0.0
@@ -44,5 +69,9 @@ class CanvasAnimation(context: Context) : View(context) {
             ratio = 1.0
         }
         return (ratio * canvas_width.toDouble()).toFloat()
+    }
+
+    fun nextFrame(){
+        this.circular_w_ratio += 0.01
     }
 }
