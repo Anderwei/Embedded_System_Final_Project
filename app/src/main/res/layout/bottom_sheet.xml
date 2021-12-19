@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:behavior_hideable="false"
-    app:behavior_peekHeight="30dp"
+    app:behavior_peekHeight="50dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <LinearLayout
@@ -14,75 +14,11 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/AtextView"
+        <ImageView
+            android:id="@+id/imageView3"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@color/design_default_color_primary"
-            android:gravity="center"
-            android:text="ItemA"
-            android:textColor="@android:color/background_light"
-            android:textSize="24sp" />
-        <TextView
-            android:id="@+id/BtextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@color/design_default_color_primary"
-            android:gravity="center"
-            android:text="ItemB"
-            android:textColor="@android:color/background_light"
-            android:textSize="24sp" />
-        <TextView
-            android:id="@+id/CtextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@color/design_default_color_primary"
-            android:gravity="center"
-            android:text="ItemC"
-            android:textColor="@android:color/background_light"
-            android:textSize="24sp" />
-        <TextView
-            android:id="@+id/DtextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@color/design_default_color_primary"
-            android:gravity="center"
-            android:text="ItemD"
-            android:textColor="@android:color/background_light"
-            android:textSize="24sp" />
-        <TextView
-            android:id="@+id/EtextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@color/design_default_color_primary"
-            android:gravity="center"
-            android:text="ItemE"
-            android:textColor="@android:color/background_light"
-            android:textSize="24sp" />
-        <TextView
-            android:id="@+id/FtextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@color/design_default_color_primary"
-            android:gravity="center"
-            android:text="ItemF"
-            android:textColor="@android:color/background_light"
-            android:textSize="24sp" />
-        <TextView
-            android:id="@+id/GtextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@color/design_default_color_primary"
-            android:gravity="center"
-            android:text="ItemG"
-            android:textColor="@android:color/background_light"
-            android:textSize="24sp" />
+            android:layout_height="50dp"
+            app:srcCompat="@drawable/ic_baseline_expand_less_24" />
+
     </LinearLayout>
 </FrameLayout>
