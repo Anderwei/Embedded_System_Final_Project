@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         var  task:Runnable = Runnable{
             while(true){
                 ca.nextFrame()
-                Thread.sleep(100)
+                Thread.sleep(1000)
             }
         }
 
