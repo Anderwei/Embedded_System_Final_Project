@@ -4,21 +4,36 @@
     android:id="@+id/bottom_sheet"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#00000000"
     android:orientation="vertical"
     app:behavior_hideable="false"
-    app:behavior_peekHeight="50dp"
+    app:behavior_peekHeight="32dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/sheet_background"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="36dp"
+            android:background="#00000000"
             app:srcCompat="@drawable/ic_baseline_expand_less_24" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/my_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+        </androidx.recyclerview.widget.RecyclerView>
 
     </LinearLayout>
 </FrameLayout>
