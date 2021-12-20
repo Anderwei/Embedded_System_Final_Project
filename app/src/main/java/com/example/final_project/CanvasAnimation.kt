@@ -16,6 +16,19 @@ class CanvasAnimation(context: Context) : View(context) {
     private var circular_w_ratio = 0.5
     private var circular_h_ratio = 0.5
 
+
+    init {
+        var task:Runnable = Runnable{
+            while(true){
+                invalidate()
+                Thread.sleep(100)
+            }
+        }
+
+        var td = Thread(task)
+        td.start()
+    }
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         canvas_height = h
@@ -60,6 +73,5 @@ class CanvasAnimation(context: Context) : View(context) {
 
     fun nextFrame(){
         this.circular_w_ratio += 0.01
-        invalidate()
     }
 }
