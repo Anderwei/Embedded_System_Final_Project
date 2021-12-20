@@ -3,9 +3,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
+import android.graphics.Path
 import android.view.View
 
 class CanvasAnimation(context: Context) : View(context) {
@@ -13,19 +11,18 @@ class CanvasAnimation(context: Context) : View(context) {
     private var canvas_width:Int = 0
     private var canvas_height:Int = 0
 
-    private var circular_w_ratio = 0.5
-    private var circular_h_ratio = 0.5
+    private var hamilton_path = HamiltonPathAlgHandler()
 
 
     init {
-        var task:Runnable = Runnable{
+        val task = Runnable{
             while(true){
                 invalidate()
                 Thread.sleep(100)
             }
         }
 
-        var td = Thread(task)
+        val td = Thread(task)
         td.start()
     }
 
@@ -39,17 +36,11 @@ class CanvasAnimation(context: Context) : View(context) {
         super.onDraw(canvas)
 
         if(canvas!= null){
-
-            val p = Paint()
-            p.strokeWidth = 3f
-            p.color = Color.RED
-            p.style = Paint.Style.STROKE
-
-            canvas.drawCircle(ratioToSizeW(circular_w_ratio), ratioToSizeH(circular_h_ratio), 150f, p)
+            hamilton_path.drawing(this,canvas)
         }
     }
 
-    private fun ratioToSizeH(Ratio: Double):Float{
+    fun ratioToSizeH(Ratio: Double):Float{
         var ratio:Double = Ratio
         if(ratio <0){
             ratio = 0.0
@@ -60,7 +51,7 @@ class CanvasAnimation(context: Context) : View(context) {
         return (ratio * canvas_height.toDouble()).toFloat()
     }
 
-    private fun ratioToSizeW(Ratio: Double):Float{
+    fun ratioToSizeW(Ratio: Double):Float{
         var ratio:Double = Ratio
         if(ratio <0){
             ratio = 0.0
@@ -72,6 +63,164 @@ class CanvasAnimation(context: Context) : View(context) {
     }
 
     fun nextFrame(){
-        this.circular_w_ratio += 0.01
+        hamilton_path.nextState()
+    }
+
+
+}
+
+class HamiltonPathAlgHandler{
+
+    private class Vertex(_id:Int,x_pos: Double, y_pos: Double) {
+        var id:Int = _id
+        var x:Double = x_pos
+        var y:Double = y_pos
+        var nei:MutableList<Vertex> = ArrayList()
+        var last:Int = 0
+        fun addNei(v : Vertex){
+            nei.add(v)
+        }
+    }
+
+    private class Edge(_v1:Vertex,_v2:Vertex){
+        var v1:Vertex = _v1
+        var v2:Vertex = _v2
+    }
+
+    private var vertexs:MutableList<Vertex> = ArrayList()
+    private var edges:MutableList<Edge> = ArrayList()
+
+    private var circle_painter:Paint = Paint()
+    private var root_painter:Paint = Paint()
+    private var line_painter:Paint = Paint()
+    private var path_painter:Paint = Paint()
+
+    private var history:MutableList<Vertex> = ArrayList()
+
+    private var isVisited:MutableList<Boolean> = arrayListOf(false,false,false,false,false)
+
+    private var currentV:Vertex
+
+    private var isRetreat = false
+
+    init{
+        // set painter
+        circle_painter.strokeWidth = 1f
+        circle_painter.color = Color.BLUE
+        circle_painter.style = Paint.Style.FILL
+
+        root_painter.strokeWidth = 1f
+        root_painter.color = Color.GREEN
+        root_painter.style = Paint.Style.FILL
+
+        line_painter.strokeWidth = 15f
+        line_painter.color = Color.BLACK
+        line_painter.style = Paint.Style.STROKE
+
+        path_painter.strokeWidth = 15f
+        path_painter.color = Color.RED
+        path_painter.style = Paint.Style.STROKE
+
+        // build graphic
+        vertexs.add(Vertex(0,0.25,0.5))
+        vertexs.add(Vertex(1,0.5,0.33))
+        vertexs.add(Vertex(2,0.75,0.33))
+        vertexs.add(Vertex(3,0.5,0.66))
+        vertexs.add(Vertex(4,0.75,0.66))
+
+
+
+        edges.add(Edge(vertexs[0],vertexs[1]))
+        vertexs[0].addNei(vertexs[1])
+        vertexs[1].addNei(vertexs[0])
+        edges.add(Edge(vertexs[1],vertexs[2]))
+        vertexs[1].addNei(vertexs[2])
+        vertexs[2].addNei(vertexs[1])
+        edges.add(Edge(vertexs[1],vertexs[3]))
+        vertexs[1].addNei(vertexs[3])
+        vertexs[3].addNei(vertexs[1])
+        edges.add(Edge(vertexs[0],vertexs[3]))
+        vertexs[0].addNei(vertexs[3])
+        vertexs[3].addNei(vertexs[0])
+        edges.add(Edge(vertexs[1],vertexs[4]))
+        vertexs[1].addNei(vertexs[4])
+        vertexs[4].addNei(vertexs[1])
+        edges.add(Edge(vertexs[2],vertexs[3]))
+        vertexs[2].addNei(vertexs[3])
+        vertexs[3].addNei(vertexs[2])
+        edges.add(Edge(vertexs[3],vertexs[4]))
+        vertexs[3].addNei(vertexs[4])
+        vertexs[4].addNei(vertexs[3])
+        edges.add(Edge(vertexs[2],vertexs[4]))
+        vertexs[2].addNei(vertexs[4])
+        vertexs[4].addNei(vertexs[2])
+
+
+        isVisited[0] = true
+        currentV = vertexs[0]
+        history.add(vertexs[0])
+    }
+
+    fun isAllVisited():Boolean{
+        var bool = true
+        for(b in isVisited){
+            bool = bool && b
+        }
+        return bool
+    }
+
+    fun nextState(){
+
+        if(currentV.last == currentV.nei.size){
+            if(!(vertexs[0] in currentV.nei) or !isAllVisited()){
+                currentV.last = 0
+                isVisited[currentV.id] = false
+                isRetreat = true
+            }
+        }
+        if(!isRetreat){
+            for(i in currentV.last..currentV.nei.size-1){
+                currentV.last += 1
+                if(!isVisited[currentV.nei[i].id]){
+                    isVisited[currentV.nei[i].id] = true
+                    history.add(currentV.nei[i])
+                    currentV = currentV.nei[i]
+                    return
+                }
+            }
+            if(isAllVisited() && (vertexs[0] in currentV.nei)){
+                history.add(vertexs[0])
+            }
+        }else{
+            history.removeLast()
+            currentV = history.last()
+
+            isRetreat = false
+        }
+
+
+
+
+
+    }
+
+    fun drawing(ca : CanvasAnimation,canvas: Canvas){
+        for(edge in edges){
+            canvas.drawLine(ca.ratioToSizeW(edge.v1.x),ca.ratioToSizeH(edge.v1.y),ca.ratioToSizeW(edge.v2.x),ca.ratioToSizeH(edge.v2.y),line_painter)
+        }
+
+        for( i in 0 until history.size - 1){
+            canvas.drawLine(ca.ratioToSizeW(history[i].x),ca.ratioToSizeH(history[i].y),ca.ratioToSizeW(history[i+1].x),ca.ratioToSizeH(history[i+1].y),path_painter)
+        }
+
+
+        for(vert in vertexs){
+            if(vert.id == 0){
+                canvas.drawCircle(ca.ratioToSizeW(vert.x), ca.ratioToSizeH(vert.y), 50f, root_painter)
+            }else{
+                canvas.drawCircle(ca.ratioToSizeW(vert.x), ca.ratioToSizeH(vert.y), 50f, circle_painter)
+            }
+        }
+
     }
 }
