@@ -5,9 +5,10 @@
       <map>
         <entry key="..\:/Embedded_Final_Project/Embedded_System_Final_Project/app/src/main/res/drawable/main_background.xml" value="0.20208333333333334" />
         <entry key="..\:/Embedded_Final_Project/Embedded_System_Final_Project/app/src/main/res/drawable/sheet_background.xml" value="0.18854166666666666" />
-        <entry key="..\:/Embedded_Final_Project/Embedded_System_Final_Project/app/src/main/res/layout/activity_main.xml" value="0.25364583333333335" />
+        <entry key="..\:/Embedded_Final_Project/Embedded_System_Final_Project/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Embedded_Final_Project/Embedded_System_Final_Project/app/src/main/res/layout/bottom_sheet.xml" value="0.225" />
-        <entry key="..\:/Embedded_Final_Project/Embedded_System_Final_Project/app/src/main/res/layout/intro_layout.xml" value="0.19791666666666666" />
+        <entry key="..\:/Embedded_Final_Project/Embedded_System_Final_Project/app/src/main/res/layout/expend_list.xml" value="0.1" />
+        <entry key="..\:/Embedded_Final_Project/Embedded_System_Final_Project/app/src/main/res/layout/intro_layout.xml" value="0.1" />
         <entry key="..\:/Embedded_Final_Project/Embedded_System_Final_Project/app/src/main/res/layout/introduction_layout.xml" value="0.24818840579710144" />
         <entry key="..\:/Embedded_Final_Project/Embedded_System_Final_Project/app/src/main/res/layout/list_item.xml" value="0.136" />
         <entry key="..\:/Embedded_Final_Project/Embedded_System_Final_Project/app/src/main/res/layout/my_text_view.xml" value="0.18385416666666668" />
