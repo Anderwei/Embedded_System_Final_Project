@@ -40,7 +40,7 @@ class MyAdapter(private val data: ArrayList<Item>) :  RecyclerView.Adapter<MyVie
     }
 
     override fun getItemCount(): Int {
-        return 1000
+        return data.size
     }
 
 }
