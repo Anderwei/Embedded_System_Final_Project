@@ -8,13 +8,21 @@ import android.text.TextPaint
 import android.view.View
 import java.lang.Integer.min
 
-class CanvasAnimation(context: Context) : View(context) {
+
+val HAMILTON_PATH = 0
+val HAMILTON_SHORTEST_PATH = 1
+val CIRCUIT_PROBLEM = 2
+
+
+class CanvasAnimation(context: Context,algNum : Int) : View(context) {
+
+
 
     private var canvas_width:Int = 0
     private var canvas_height:Int = 0
+    private var currentAlg:Int = algNum
 
-    private var hamilton_path = HamiltonPathAlgHandler()
-    private var hamilton_shortest_path = HamiltonShortestPathHandler()
+    private var algs:ArrayList<AlgorithmHandler> = arrayListOf(HamiltonPathAlgHandler(),HamiltonShortestPathHandler(),CircuitProblemHandler())
 
 
     init {
@@ -39,8 +47,7 @@ class CanvasAnimation(context: Context) : View(context) {
         super.onDraw(canvas)
 
         if(canvas!= null){
-//          hamilton_path.drawing(this,canvas)
-            hamilton_shortest_path.drawing(this,canvas)
+            algs[currentAlg].drawing(this,canvas)
         }
     }
 
@@ -67,14 +74,21 @@ class CanvasAnimation(context: Context) : View(context) {
     }
 
     fun nextFrame(){
-//        hamilton_path.nextState()
-        hamilton_shortest_path.nextState()
+        algs[currentAlg].nextState()
     }
 
 
 }
 
-class HamiltonPathAlgHandler{
+abstract class AlgorithmHandler{
+    
+    abstract fun nextState()
+
+    abstract fun drawing(ca : CanvasAnimation,canvas: Canvas)
+
+}
+
+class HamiltonPathAlgHandler: AlgorithmHandler() {
 
     private class Vertex(_id:Int,x_pos: Double, y_pos: Double) {
         var id:Int = _id
@@ -181,9 +195,7 @@ class HamiltonPathAlgHandler{
         return bool
     }
 
-    fun nextState(){
-
-
+    override fun nextState(){
         if(state == 2){
             verify_traversal()
         }
@@ -252,7 +264,7 @@ class HamiltonPathAlgHandler{
         history.add(vertexs[0])
     }
 
-    fun drawing(ca : CanvasAnimation,canvas: Canvas){
+    override fun drawing(ca : CanvasAnimation,canvas: Canvas){
         for(edge in edges){
             canvas.drawLine(ca.ratioToSizeW(edge.v1.x),ca.ratioToSizeH(edge.v1.y),ca.ratioToSizeW(edge.v2.x),ca.ratioToSizeH(edge.v2.y),line_painter)
         }
@@ -276,7 +288,7 @@ class HamiltonPathAlgHandler{
     }
 }
 
-class HamiltonShortestPathHandler{
+class HamiltonShortestPathHandler: AlgorithmHandler() {
 
     private class Vertex(_id:Int,x_pos: Double, y_pos: Double) {
         var id:Int = _id
@@ -396,7 +408,7 @@ class HamiltonShortestPathHandler{
         return bool
     }
 
-    fun nextState(){
+    override fun nextState(){
         if(state == 8){
             resetGraph()
         }
@@ -484,7 +496,7 @@ class HamiltonShortestPathHandler{
         state += 1
     }
 
-    fun drawing(ca : CanvasAnimation,canvas: Canvas){
+    override fun drawing(ca : CanvasAnimation,canvas: Canvas){
 
         fun edgeToTextCoordinate(e : Edge):Pair<Float,Float>{
 
