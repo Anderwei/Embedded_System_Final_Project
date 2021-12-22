@@ -94,19 +94,22 @@ class HamiltonPathAlgHandler{
     private var root_painter:Paint = Paint()
     private var line_painter:Paint = Paint()
     private var path_painter:Paint = Paint()
+    private var verify_path_painer:Paint = Paint()
 
     private var history:MutableList<Vertex> = ArrayList()
+
+    private var verifying_history:Int = 0
 
     private var isVisited:MutableList<Boolean> = arrayListOf(false,false,false,false,false)
 
     private var currentV:Vertex
 
-    private var isRetreat = false
+    private var state = 0 // search = 0,retreat = 1,verify = 2
 
     init{
         // set painter
         circle_painter.strokeWidth = 1f
-        circle_painter.color = Color.BLUE
+        circle_painter.color = Color.rgb(255,100,255)
         circle_painter.style = Paint.Style.FILL
 
         root_painter.strokeWidth = 1f
@@ -118,8 +121,12 @@ class HamiltonPathAlgHandler{
         line_painter.style = Paint.Style.STROKE
 
         path_painter.strokeWidth = 15f
-        path_painter.color = Color.RED
+        path_painter.color = Color.BLUE
         path_painter.style = Paint.Style.STROKE
+
+        verify_path_painer.strokeWidth = 15f
+        verify_path_painer.color = Color.RED
+        verify_path_painer.style = Paint.Style.STROKE
 
         // build graphic
         vertexs.add(Vertex(0,0.25,0.5))
@@ -161,7 +168,7 @@ class HamiltonPathAlgHandler{
         history.add(vertexs[0])
     }
 
-    fun isAllVisited():Boolean{
+    private fun isAllVisited():Boolean{
         var bool = true
         for(b in isVisited){
             bool = bool && b
@@ -171,37 +178,73 @@ class HamiltonPathAlgHandler{
 
     fun nextState(){
 
-        if(currentV.last == currentV.nei.size){
-            if(!(vertexs[0] in currentV.nei) or !isAllVisited()){
-                currentV.last = 0
-                isVisited[currentV.id] = false
-                isRetreat = true
+
+        if(state == 2){
+            verify_traversal()
+        }
+        if(state == 0){
+            findingNext()
+        }
+        if(state == 1){
+            retreatPrevious()
+        }
+        if(state == 3){
+            resetGraph()
+        }
+    }
+
+    private fun findingNext(){
+        for(i in currentV.last..currentV.nei.size-1){
+            currentV.last += 1
+            if(!isVisited[currentV.nei[i].id]){
+                isVisited[currentV.nei[i].id] = true
+                history.add(currentV.nei[i])
+                currentV = currentV.nei[i]
+                return
             }
         }
-        if(!isRetreat){
-            for(i in currentV.last..currentV.nei.size-1){
-                currentV.last += 1
-                if(!isVisited[currentV.nei[i].id]){
-                    isVisited[currentV.nei[i].id] = true
-                    history.add(currentV.nei[i])
-                    currentV = currentV.nei[i]
-                    return
+        // if all nei vertex already visit
+        if(isAllVisited() && (vertexs[0] in currentV.nei)){
+            // if can go back to root
+            history.add(vertexs[0])
+            state = 2 // verifing
+        }else{
+            // path not valid, retreat
+            if(currentV.last == currentV.nei.size){
+                if(!(vertexs[0] in currentV.nei) or !isAllVisited()){
+                    currentV.last = 0
+                    isVisited[currentV.id] = false
+                    state = 1
                 }
             }
-            if(isAllVisited() && (vertexs[0] in currentV.nei)){
-                history.add(vertexs[0])
-            }
-        }else{
-            history.removeLast()
-            currentV = history.last()
-
-            isRetreat = false
         }
+    }
 
+    private fun retreatPrevious(){
+        history.removeLast()
+        currentV = history.last()
+        state = 0 // back to finding
+    }
 
+    private fun verify_traversal(){
+        if(verifying_history < history.size - 1){
+            verifying_history += 1
+        }else{
+            state = 3
+        }
+    }
 
-
-
+    private fun resetGraph(){
+        history.clear()
+        verifying_history = 0
+        state = 0
+        for(vert in vertexs){
+            vert.last = 0
+        }
+        isVisited.fill(false)
+        isVisited[0] = true
+        currentV = vertexs[0]
+        history.add(vertexs[0])
     }
 
     fun drawing(ca : CanvasAnimation,canvas: Canvas){
@@ -213,6 +256,9 @@ class HamiltonPathAlgHandler{
             canvas.drawLine(ca.ratioToSizeW(history[i].x),ca.ratioToSizeH(history[i].y),ca.ratioToSizeW(history[i+1].x),ca.ratioToSizeH(history[i+1].y),path_painter)
         }
 
+        for( i in 0 until verifying_history){
+            canvas.drawLine(ca.ratioToSizeW(history[i].x),ca.ratioToSizeH(history[i].y),ca.ratioToSizeW(history[i+1].x),ca.ratioToSizeH(history[i+1].y),verify_path_painer)
+        }
 
         for(vert in vertexs){
             if(vert.id == 0){
