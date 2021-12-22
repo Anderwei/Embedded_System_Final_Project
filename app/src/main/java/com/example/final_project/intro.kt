@@ -2,6 +2,7 @@ package com.example.final_project
 
 import android.content.Intent
 import android.os.Bundle
+import android.transition.Explode
 import android.transition.Fade
 import android.transition.Visibility
 import android.view.LayoutInflater
@@ -47,10 +48,10 @@ class intro : AppCompatActivity() {
             recyclerView.adapter = adapter
             adapter.setOnItemClickListener(object : MyAdapter.onItemClickListener {
                 override fun onItemClick(position: Int) {
-                    val intent = Intent(this@intro, showActivity::class.java)
-                    intent.putExtra("title", dataList[position % 4].t)
-                    intent.putExtra("img", dataList[position % 4].img)
-                    startActivity(intent)
+//                    val intent = Intent(this@intro, showActivity::class.java)
+//                    intent.putExtra("title", dataList[position % 4].t)
+//                    intent.putExtra("img", dataList[position % 4].img)
+//                    startActivity(intent)
                 }
             })
         }
