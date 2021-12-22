@@ -1,16 +1,27 @@
 package com.example.final_project
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.transition.Explode
 import android.transition.Fade
 import android.transition.Visibility
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.util.ArrayList
+import android.text.method.ScrollingMovementMethod
+import android.view.View
+import android.widget.ImageView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+
 
 data class Item(var img: Int,var t : String) {}
 data class NP_Item(var title: String, var content :String, var visibility: Boolean = false){}
@@ -20,8 +31,12 @@ class intro : AppCompatActivity() {
     lateinit var OptionImg: Array<Int>
     lateinit var OptionText: Array<String>
     lateinit var dataList: ArrayList<Item>
+    lateinit var NpListTitle:Array<String>
     lateinit var npListContent : Array<String>
+    lateinit var problemContent:Array<String>
     lateinit var npList: ArrayList<NP_Item>
+
+    lateinit var bottom_sheet_behavior:BottomSheetBehavior<View>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +45,8 @@ class intro : AppCompatActivity() {
         init()
 
         if (isBottomSheetLoad) {
+
+
             // Dynamic load bottom sheet
             var inf: LayoutInflater = LayoutInflater.from(this)
             findViewById<ViewGroup>(R.id.intro_Screen).addView(inf.inflate(R.layout.bottom_sheet, findViewById<ViewGroup>(R.id.intro_Screen), false))
@@ -43,12 +60,70 @@ class intro : AppCompatActivity() {
             recyclerView.adapter = adapter
             adapter.setOnItemClickListener(object : MyAdapter.onItemClickListener {
                 override fun onItemClick(position: Int) {
-//                    val intent = Intent(this@intro, showActivity::class.java)
-//                    intent.putExtra("title", dataList[position % 4].t)
-//                    intent.putExtra("img", dataList[position % 4].img)
-//                    startActivity(intent)
-                    
 
+                    findViewById<LinearLayout>(R.id.constraintLayout).removeAllViews()
+
+                    if(position % 5 == 0){
+                        var rv:RecyclerView = RecyclerView(applicationContext)
+                        findViewById<LinearLayout>(R.id.constraintLayout).addView(rv,0)
+                        rv.layoutManager = LinearLayoutManager(applicationContext,LinearLayoutManager.VERTICAL,false)
+                        val adapterNP = MyExpendAdapter(npList)
+                        rv.adapter = adapterNP
+                    }
+
+                    if(position % 5 == 1){
+                        val ca:CanvasAnimation = CanvasAnimation(applicationContext,0)
+                        ca.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,(400 * applicationContext.resources.displayMetrics.density).toInt())
+                        findViewById<LinearLayout>(R.id.constraintLayout).addView(ca)
+
+                        val tv:TextView = TextView(applicationContext)
+                        findViewById<LinearLayout>(R.id.constraintLayout).addView(tv)
+                        tv.text = problemContent[0]
+                        tv.setTextColor(Color.rgb(255,255,255))
+                        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP,(18).toFloat())
+                    }
+
+                    if(position % 5 == 2){
+                        val ca:CanvasAnimation = CanvasAnimation(applicationContext,1)
+                        ca.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,(400 * applicationContext.resources.displayMetrics.density).toInt())
+                        findViewById<LinearLayout>(R.id.constraintLayout).addView(ca)
+
+                        val tv:TextView = TextView(applicationContext)
+                        findViewById<LinearLayout>(R.id.constraintLayout).addView(tv)
+                        tv.text = problemContent[1]
+                        tv.setTextColor(Color.rgb(255,255,255))
+                        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP,(18).toFloat())
+                    }
+
+                    if(position % 5 == 3){
+                        val ca:CanvasAnimation = CanvasAnimation(applicationContext,2)
+                        ca.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,(400 * applicationContext.resources.displayMetrics.density).toInt())
+                        findViewById<LinearLayout>(R.id.constraintLayout).addView(ca)
+
+                        val tv:TextView = TextView(applicationContext)
+                        findViewById<LinearLayout>(R.id.constraintLayout).addView(tv)
+                        tv.text = problemContent[2]
+                        tv.setTextColor(Color.rgb(255,255,255))
+                        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP,(18).toFloat())
+                    }
+
+                }
+            })
+
+
+            bottom_sheet_behavior = BottomSheetBehavior.from(findViewById(R.id.bottom_sheet))
+
+            bottom_sheet_behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+
+                override fun onStateChanged(bottomSheet: View, newState: Int) {
+                    if( newState == BottomSheetBehavior.STATE_EXPANDED){
+                        findViewById<ImageView>(R.id.imageView3).animate().rotation((180).toFloat()).start()
+                    }else{
+                        findViewById<ImageView>(R.id.imageView3).animate().rotation((0).toFloat()).start()
+                    }
+                }
+
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {
                 }
             })
         }
@@ -66,16 +141,23 @@ class intro : AppCompatActivity() {
                 R.drawable.np_graph,
                 R.drawable.pathfinding,
                 R.drawable.ptsd,
-                R.drawable.optimization,
-                R.drawable.circuit
+                R.drawable.circuit,
+                R.drawable.optimization
         )
 
         OptionText = arrayOf(
                 "Introduction of NP / NP-Hard",
                 "PathFinding - NP",
                 "PathFinding - NP Hardness",
+                "Circuit",
                 "Optimization",
-                "Circuit"
+        )
+
+        NpListTitle = arrayOf(
+                "多項式時間(Polynomial time)",
+                "決策問題(decision problem)",
+                "什麼是NP / NP-Complete?",
+                "什麼是 NP-Hard?",
         )
 
         npListContent = arrayOf(
@@ -108,21 +190,49 @@ class intro : AppCompatActivity() {
                         "如西洋棋中存在最佳解的問題\n" +
                         "除了計算外，連驗證都需要大量的時間\n" +
                         "這類的問題就會被歸類到 NP-Hard 中",
-                "",
-                "",
-                "",
-                ""
+        )
+
+        problemContent = arrayOf(
+                    "這個問題是在於要找一個不重複的路徑能走過所有圖上的點\n" +
+                    "對於這個問題沒有一個快速的解法\n" +
+                    "唯一的方法便是嘗試所有可能的路徑\n" +
+                    "如動畫中的藍色線顯示的\n" +
+                    "但要驗證是不是合法的 Hamilton Path 很簡單\n" +
+                    "只要走一遍路徑並檢查有沒有通過所有點\n" +
+                    "便能直接的確認是不是 Hamilton Path\n" +
+                    "因為有一個快速驗證的方法\n" +
+                    "因此這個問題是一個 NP 問題",
+
+                    "這個問題雖然看似跟非最短路徑版類似\n" +
+                    "但在求解與驗算部份卻天差地遠\n" +
+                    "找到最佳路徑依然還是得靠嘗試\n" +
+                    "不一樣的是無法透過純粹的檢查路徑確認是否為最短\n" +
+                    "因此仍得像找最佳路徑般尋遍所有可能的走法\n" +
+                    "因為驗證的時間跟尋找解的時間都是一樣的\n" +
+                    "且不是多項式時間內能解出的問題\n" +
+                    "所以被歸在 NP hard 的部份",
+
+                    "這個問題是在給予一張電路圖\n" +
+                    "找出是否有輸入能使這組電路輸出 1 的訊號\n" +
+                    "這個問題除了直接測試所有可能的組合外\n" +
+                    "已有許多的演算法可以有效率的處理這個問題\n" +
+                    "此問題也是最早被證明為 NP-Complete 的問題",
+
+
         )
 
         dataList = arrayListOf<Item>()
         npList = arrayListOf<NP_Item>()
 
-        for (i in 0..(OptionText.size - 1)) {
-            val temp = Item(OptionImg[i], OptionText[i])
-            val temp2 = NP_Item(OptionText[i], npListContent[i])
-            dataList.add(temp)
-            npList.add(temp2)
+        for(i in NpListTitle.indices){
+            npList.add(NP_Item(NpListTitle[i], npListContent[i]))
         }
+
+        for (i in OptionText.indices) {
+            dataList.add(Item(OptionImg[i], OptionText[i]))
+        }
+
+    }
 
     fun openBottomSheet(view: View){
         if(bottom_sheet_behavior.state == BottomSheetBehavior.STATE_COLLAPSED){
