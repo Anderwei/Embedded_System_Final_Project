@@ -24,5 +24,4 @@ class MainActivity : AppCompatActivity() {
         val introActivity : Intent = Intent(this,intro::class.java)
         startActivity(introActivity,ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle())
     }
-
 }

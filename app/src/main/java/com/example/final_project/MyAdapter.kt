@@ -33,7 +33,7 @@ class MyAdapter(private val data: ArrayList<Item>) :  RecyclerView.Adapter<MyVie
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val currentItems = data[position % 3]
+        val currentItems = data[position % 4]
         holder.textView.text = currentItems.t
 //        holder.textView.background = currentItems.img
         holder.imageView.setImageResource(currentItems.img)
