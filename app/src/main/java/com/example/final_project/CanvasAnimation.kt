@@ -6,6 +6,7 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.text.TextPaint
 import android.view.View
+import java.lang.Integer.min
 
 class CanvasAnimation(context: Context) : View(context) {
 
@@ -303,16 +304,19 @@ class HamiltonShortestPathHandler{
     private var path_painter:Paint = Paint()
     private var verify_path_painter:Paint = Paint()
     private var text_painter:Paint = TextPaint()
+    private var weight_text_painter:Paint = TextPaint()
 
     private var history:MutableList<Vertex> = ArrayList()
 
     private var verifying_history:Int = 0
+    private var minium_history:MutableList<Vertex> = ArrayList()
 
     private var isVisited:MutableList<Boolean> = arrayListOf(false,false,false,false,false)
     private var currentV:Vertex
-    private var state = 0 // search = 0,retreat = 1,verify = 2
+    private var state = 0
     private var currentWeight = 0
-    private var minWeight = 1000000
+    private var minWeight = 1000
+    private var isShowingResult = false
 
     init{
         // set painter
@@ -341,6 +345,10 @@ class HamiltonShortestPathHandler{
         text_painter.isAntiAlias = true
         text_painter.style = Paint.Style.STROKE
         text_painter.strokeWidth = 10f
+
+        weight_text_painter.color = Color.BLACK
+        weight_text_painter.textSize = (64).toFloat()
+        weight_text_painter.isAntiAlias = true
 
         // build graphic
         vertexs.add(Vertex(0,0.25,0.5))
@@ -389,6 +397,12 @@ class HamiltonShortestPathHandler{
     }
 
     fun nextState(){
+        if(state == 8){
+            resetGraph()
+        }
+        if(state > 1 && state < 8){
+            showResult()
+        }
         if(state == 1){
             retreatPrevious()
         }
@@ -423,6 +437,11 @@ class HamiltonShortestPathHandler{
             history.add(vertexs[0])
             currentWeight += findEdgeWeight(currentV,vertexs[0])
             verifying_history = history.size - 1
+            if(minWeight > currentWeight){
+                minium_history = history.toMutableList()
+                minWeight = currentWeight
+            }
+            minWeight = min(minWeight,currentWeight)
         }
         currentV.last = 0
         isVisited[currentV.id] = false
@@ -454,6 +473,15 @@ class HamiltonShortestPathHandler{
         isVisited[0] = true
         currentV = vertexs[0]
         history.add(vertexs[0])
+        currentWeight = 0
+        minWeight = 10000
+        isShowingResult = false
+        minium_history.clear()
+    }
+
+    private fun showResult(){
+        isShowingResult = true
+        state += 1
     }
 
     fun drawing(ca : CanvasAnimation,canvas: Canvas){
@@ -476,6 +504,12 @@ class HamiltonShortestPathHandler{
 
         for( i in 0 until verifying_history){
             canvas.drawLine(ca.ratioToSizeW(history[i].x),ca.ratioToSizeH(history[i].y),ca.ratioToSizeW(history[i+1].x),ca.ratioToSizeH(history[i+1].y),verify_path_painter)
+        }
+
+        if(isShowingResult){
+            for( i in 0 until minium_history.size - 1){
+                canvas.drawLine(ca.ratioToSizeW(minium_history[i].x),ca.ratioToSizeH(minium_history[i].y),ca.ratioToSizeW(minium_history[i+1].x),ca.ratioToSizeH(minium_history[i+1].y),verify_path_painter)
+            }
         }
 
         for(vert in vertexs){
@@ -529,7 +563,15 @@ class HamiltonShortestPathHandler{
         x = x_y.first
         y = x_y.second
         canvas.drawText(edges[7].weight.toString(), x + 20f, y + 20f,text_painter)
-
-        canvas.drawText(currentWeight.toString(),ca.ratioToSizeW(0.9),ca.ratioToSizeH(0.9),text_painter)
+        if(currentWeight != 0){
+            canvas.drawText("current : " + currentWeight.toString(),ca.ratioToSizeW(0.5),ca.ratioToSizeH(0.8),weight_text_painter)
+        }else{
+            canvas.drawText("current : NaN",ca.ratioToSizeW(0.5),ca.ratioToSizeH(0.8),weight_text_painter)
+        }
+        if(minWeight < 1000){
+            canvas.drawText("Mininum : " + minWeight.toString(),ca.ratioToSizeW(0.5),ca.ratioToSizeH(0.9),weight_text_painter)
+        }else{
+            canvas.drawText("Mininum : NaN",ca.ratioToSizeW(0.5),ca.ratioToSizeH(0.9),weight_text_painter)
+        }
     }
 }
