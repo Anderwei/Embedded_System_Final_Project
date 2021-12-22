@@ -66,7 +66,8 @@ class CanvasAnimation(context: Context) : View(context) {
     }
 
     fun nextFrame(){
-        hamilton_path.nextState()
+//        hamilton_path.nextState()
+        hamilton_shortest_path.nextState()
     }
 
 
@@ -308,10 +309,10 @@ class HamiltonShortestPathHandler{
     private var verifying_history:Int = 0
 
     private var isVisited:MutableList<Boolean> = arrayListOf(false,false,false,false,false)
-
     private var currentV:Vertex
-
     private var state = 0 // search = 0,retreat = 1,verify = 2
+    private var currentWeight = 0
+    private var minWeight = 1000000
 
     init{
         // set painter
@@ -388,18 +389,21 @@ class HamiltonShortestPathHandler{
     }
 
     fun nextState(){
-        if(state == 2){
-            verify_traversal()
+        if(state == 1){
+            retreatPrevious()
         }
         if(state == 0){
             findingNext()
         }
-        if(state == 1){
-            retreatPrevious()
+    }
+
+    private fun findEdgeWeight(v1:Vertex,v2:Vertex):Int{
+        for(e in edges){
+            if((e.v1 == v1 && e.v2 == v2) || (e.v2 == v1 && e.v1 == v2)){
+                return e.weight
+            }
         }
-        if(state == 3){
-            resetGraph()
-        }
+        return -1
     }
 
     private fun findingNext(){
@@ -408,6 +412,7 @@ class HamiltonShortestPathHandler{
             if(!isVisited[currentV.nei[i].id]){
                 isVisited[currentV.nei[i].id] = true
                 history.add(currentV.nei[i])
+                currentWeight += findEdgeWeight(currentV,currentV.nei[i])
                 currentV = currentV.nei[i]
                 return
             }
@@ -416,31 +421,26 @@ class HamiltonShortestPathHandler{
         if(isAllVisited() && (vertexs[0] in currentV.nei)){
             // if can go back to root
             history.add(vertexs[0])
-            state = 2 // verifing
-        }else{
-            // path not valid, retreat
-            if(currentV.last == currentV.nei.size){
-                if(!(vertexs[0] in currentV.nei) or !isAllVisited()){
-                    currentV.last = 0
-                    isVisited[currentV.id] = false
-                    state = 1
-                }
-            }
+            currentWeight += findEdgeWeight(currentV,vertexs[0])
+            verifying_history = history.size - 1
         }
+        currentV.last = 0
+        isVisited[currentV.id] = false
+        state = 1
+
     }
 
     private fun retreatPrevious(){
-        history.removeLast()
-        currentV = history.last()
-        state = 0 // back to finding
-    }
-
-    private fun verify_traversal(){
-        if(verifying_history < history.size - 1){
-            verifying_history += 1
+        verifying_history = 0
+        if(history.size > 1){
+            currentWeight -= findEdgeWeight(history.last(),history[history.lastIndex - 1])
+            history.removeLast()
+            currentV = history.last()
+            state = 0 // back to finding
         }else{
-            state = 3
+            state = 2
         }
+
     }
 
     private fun resetGraph(){
@@ -460,8 +460,8 @@ class HamiltonShortestPathHandler{
 
         fun edgeToTextCoordinate(e : Edge):Pair<Float,Float>{
 
-            var x:Float = ca.ratioToSizeW((e.v1.x + e.v2.x) / 2)
-            var y:Float = ca.ratioToSizeH((e.v1.y + e.v2.y)/ 2)
+            val x:Float = ca.ratioToSizeW((e.v1.x + e.v2.x) / 2)
+            val y:Float = ca.ratioToSizeH((e.v1.y + e.v2.y)/ 2)
 
             return Pair(x,y)
         }
@@ -530,6 +530,6 @@ class HamiltonShortestPathHandler{
         y = x_y.second
         canvas.drawText(edges[7].weight.toString(), x + 20f, y + 20f,text_painter)
 
-
+        canvas.drawText(currentWeight.toString(),ca.ratioToSizeW(0.9),ca.ratioToSizeH(0.9),text_painter)
     }
 }
