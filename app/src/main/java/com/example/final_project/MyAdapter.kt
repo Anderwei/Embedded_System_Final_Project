@@ -1,10 +1,8 @@
 package com.example.final_project
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -35,13 +33,14 @@ class MyAdapter(private val data: ArrayList<Item>) :  RecyclerView.Adapter<MyVie
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val currentItems = data[position]
+        val currentItems = data[position % 3]
         holder.textView.text = currentItems.t
+//        holder.textView.background = currentItems.img
         holder.imageView.setImageResource(currentItems.img)
     }
 
     override fun getItemCount(): Int {
-        return data.size
+        return 1000
     }
 
 }
