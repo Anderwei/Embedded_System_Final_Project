@@ -66,24 +66,18 @@ class intro : AppCompatActivity() {
 
         //initial option text
         OptionImg = arrayOf(
-                R.drawable.polynomial_time,
-                R.drawable.decisionproblem,
                 R.drawable.np_graph,
-                R.drawable.np_hard,
                 R.drawable.pathfinding,
+                R.drawable.ptsd,
                 R.drawable.optimization,
-                R.drawable.datamining,
                 R.drawable.circuit
         )
 
         OptionText = arrayOf(
-                "Polynomial Time",
-                "Decision Problem",
-                "What is NP?",
-                "What is NP-Hard / NP-Complete",
-                "PathFinding",
+                "Introduction of NP / NP-Hard",
+                "PathFinding - NP",
+                "PathFinding - NP Hardness",
                 "Optimization",
-                "DataMining",
                 "Circuit"
         )
 
@@ -124,11 +118,11 @@ class intro : AppCompatActivity() {
         dataList = arrayListOf<Item>()
         npList = arrayListOf<NP_Item>()
 
-        for (i in 0..7) {
+        for (i in 0..(OptionText.size - 1)) {
             val temp = Item(OptionImg[i], OptionText[i])
-            val temp2 = NP_Item(OptionText[i], npListContent[i])
+//            val temp2 = NP_Item(OptionText[i], npListContent[i])
             dataList.add(temp)
-            npList.add(temp2)
+//            npList.add(temp2)
         }
 
     }
