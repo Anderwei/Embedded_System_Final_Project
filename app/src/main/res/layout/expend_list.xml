@@ -34,7 +34,10 @@
                 android:text="TextView"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                tools:layout_editor_absoluteY="710dp" />
+                android:paddingRight="30dp"
+                android:paddingLeft="5dp"
+                tools:layout_editor_absoluteY="710dp"
+                />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>

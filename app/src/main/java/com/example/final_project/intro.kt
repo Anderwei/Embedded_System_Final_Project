@@ -30,7 +30,6 @@ class intro : AppCompatActivity() {
         init()
 
         if (isBottomSheetLoad) {
-
             // Dynamic load bottom sheet
             var inf: LayoutInflater = LayoutInflater.from(this)
             findViewById<ViewGroup>(R.id.intro_Screen).addView(inf.inflate(R.layout.bottom_sheet, findViewById<ViewGroup>(R.id.intro_Screen), false))
@@ -52,6 +51,8 @@ class intro : AppCompatActivity() {
 //                    intent.putExtra("title", dataList[position % 4].t)
 //                    intent.putExtra("img", dataList[position % 4].img)
 //                    startActivity(intent)
+                    
+
                 }
             })
         }
@@ -83,32 +84,34 @@ class intro : AppCompatActivity() {
 
         npListContent = arrayOf(
                 //Polynomial Time
-                "Polynomial Time:\n" +
-                "多項式時間（英語：Polynomial time）在計算複雜度理論中，指的是一個問題的計算時間m(n)不大於問題大小n的多項式倍數。\n" +
-                "以數學描述的話，則可說m(n)= O (n^k)，k為一常數值\n",
+                "多項式時間(Polynomial time):\n" +
+                        "指的是對於一個演算法對於長為n的資料時\n" +
+                        "所需的計算時間為一個多項式\n" +
+                        "相較於指數性成長的問題，所需時間多半是可接受的",
 
                 //Decision Problem
-                "決策問題:\n" +
-                "一個決策問題(decision problem)是指其輸出，只有「是」或「否」的問題。例如，搜尋問題為詢問 x 是否出現在一個集合 A 中?若有則輸出「是」，否則輸出「否」。\n",
+                "決策問題(decision problem):\n" +
+                        "決策問題是指問題的解答只有是與不是兩種\n" +
+                        "例如「10 是否是質數?」這個問題只有是與不是兩種",
 
                 //What is NP
-                "存在著一些問題，人類目前尚無法將他們歸入集合 P 中。為了思考這些問題，於是在一般演算法可採用的功能上，擴增以下虛構的新指令。這些新指令雖然不存在於現實中，但是對探討這些難題的性質及彼此的關係，有很大的幫助。以下是這些虛構的新指令：\n" +
-                "1. choice(S)：自集合 S 中，選出會導致正確解的一個元素。當集合 S 中無此元素時，則可任意選擇一個元素。\n" +
-                "2. failure()：代表失敗結束。\n" +
-                "3. success()：代表成功結束。\n",
+                "“Non-deterministic Polynomial Problem”\n" +
+                        "指的是需要Polynomial time計算且在過程中會發生分支的問題\n" +
+                        "如多數的尋路問題，求解的過程中有許多不同的方法\n" +
+                        "但最後還是能找到相同或類似的解\n" +
+                        "另外因為目前的計算裝置的計算是線性的\n" +
+                        "需要先將會分支的問題轉換成不會分支的問題再計算\n" +
+                        "因此會直接將計算所需的時間拉長成指數級別\n" +
+                        "使多半 NP 問題在現有裝置上所需的計算時間非常長\n" +
+                "而許多 NP 問題能轉換成其他較廣義的 NP 問題\n" +
+                "這些較廣義的問題就被稱為 NP-Complete\n",
 
                 //NP-Hard / NP-Complete
-                "NP困難（NP-hardness / non-deterministic polynomial-time hardness）\n" +
-                "此問題是計算複雜性理論中最重要的複雜性類別之一。如果所有NP問題都可以多項式時間歸約到某個問題，則稱該問題為NP困難。\n" +
-                "NP完全(NP-Complete)\n" +
-                "NP-Complete為NP與NP困難的交集，是NP中最難的決策問題，所有NP問題都可以被快速歸化為NP完備問題。因此NP完備問題應該是最不可能被化簡為P的決策問題的集合。若任何NPC問題得到多項式時間的解法，那此解法就可應用在所有NP問題上。\n" +
-                "NP-algorithm:\n" +
-                        "Algorithm satisfiability (E (x 1, … , xn ))\n" +
-                        "{ Step 1: for i =1 to n do\n" +
-                        "xi ←choice (true, false) \n" +
-                        "Step 2: if E (x 1, … , x n) is true then success ()\n" +
-                        "　　　 else failure ();\n" +
-                        "}\n",
+                        "有些問題雖然也是在計算中會分支\n" +
+                        "但其在驗證問題時無法像普通的 NP 問題快速的驗證\n" +
+                        "如西洋棋中存在最佳解的問題\n" +
+                        "除了計算外，連驗證都需要大量的時間\n" +
+                        "這類的問題就會被歸類到 NP-Hard 中",
                 "",
                 "",
                 "",
@@ -120,9 +123,9 @@ class intro : AppCompatActivity() {
 
         for (i in 0..(OptionText.size - 1)) {
             val temp = Item(OptionImg[i], OptionText[i])
-//            val temp2 = NP_Item(OptionText[i], npListContent[i])
+            val temp2 = NP_Item(OptionText[i], npListContent[i])
             dataList.add(temp)
-//            npList.add(temp2)
+            npList.add(temp2)
         }
 
     }
