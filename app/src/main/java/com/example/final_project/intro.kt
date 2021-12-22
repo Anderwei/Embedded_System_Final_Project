@@ -34,11 +34,7 @@ class intro : AppCompatActivity() {
             var inf: LayoutInflater = LayoutInflater.from(this)
             findViewById<ViewGroup>(R.id.intro_Screen).addView(inf.inflate(R.layout.bottom_sheet, findViewById<ViewGroup>(R.id.intro_Screen), false))
 
-            //np explaination
-            val recyclerViewNP : RecyclerView = findViewById<RecyclerView>(R.id.recyclerView1)
-            recyclerViewNP.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
-            val adapterNP = MyExpendAdapter(npList)
-            recyclerViewNP.adapter = adapterNP
+
 
             //animation option
             val recyclerView: RecyclerView = findViewById<RecyclerView>(R.id.my_list)
