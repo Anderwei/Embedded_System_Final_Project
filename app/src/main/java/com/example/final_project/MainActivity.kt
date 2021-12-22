@@ -18,16 +18,33 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
     var isBottomSheetLoad = true
-
-    val test : Array<String> = arrayOf(
-        "Path",
-        "OIptimize Problem",
-        "Data Mining"
-    )
+    lateinit var OptionImg : Array<Int>
+    lateinit var OptionText : Array<String>
+    lateinit var testList : ArrayList<Item>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        OptionImg = arrayOf(
+                R.drawable.pathfinding,
+                R.drawable.optimize,
+                R.drawable.datamining
+        )
+
+        OptionText = arrayOf(
+                "PathFinding",
+                "Optimization",
+                "DataMining"
+        )
+
+        testList = arrayListOf<Item>()
+
+        for(i in 0..2){
+            val temp = Item(OptionImg[i],OptionText[i])
+            testList.add(temp)
+        }
+
 
         if (isBottomSheetLoad) {
 
@@ -37,11 +54,11 @@ class MainActivity : AppCompatActivity() {
 
             val recyclerView: RecyclerView = findViewById<RecyclerView>(R.id.my_list)
             recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-            val adapter = MyAdapter(test)
+            val adapter = MyAdapter(testList)
             recyclerView.adapter = adapter
             adapter.setOnItemClickListener(object : MyAdapter.onItemClickListener{
                 override fun onItemClick(position: Int){
-                    Toast.makeText(this@MainActivity,test[position],Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this@MainActivity,testList[position],Toast.LENGTH_SHORT).show()
                 }
             })
 
