@@ -587,3 +587,265 @@ class HamiltonShortestPathHandler: AlgorithmHandler() {
         }
     }
 }
+
+class CircuitProblemHandler:AlgorithmHandler(){
+
+    private var deactive_wire:Paint = Paint()
+    private var active_wire:Paint = Paint()
+    private var active_io:Paint = Paint()
+    private var deactive_io:Paint = Paint()
+    private var gate_frame:Paint = Paint()
+    private var text_painter:Paint = Paint()
+
+    private var booleanInput:MutableList<Boolean> = arrayListOf(false,false,false,false,false)
+    private var intInput:Int = 0
+
+    init{
+
+        deactive_wire.strokeWidth = 15f
+        deactive_wire.color = Color.BLACK
+        deactive_wire.style = Paint.Style.STROKE
+
+        active_wire.strokeWidth = 15f
+        active_wire.color = Color.RED
+        active_wire.style = Paint.Style.STROKE
+
+        gate_frame.strokeWidth = 5f
+        gate_frame.color = Color.BLACK
+        gate_frame.style = Paint.Style.STROKE
+
+        active_io.color = Color.RED
+        active_io.style = Paint.Style.FILL
+
+        deactive_io.color = Color.BLACK
+        deactive_io.style = Paint.Style.FILL
+
+        text_painter.color = Color.BLACK
+        text_painter.textSize = (64).toFloat()
+        text_painter.isAntiAlias = true
+
+
+    }
+
+    override fun nextState() {
+        intInput = (intInput + 1) % 32
+        var t = intInput
+        for(i in 0..4){
+            booleanInput[i] = ((t % 2) == 1)
+            t /= 2
+        }
+
+    }
+
+    override fun drawing(ca: CanvasAnimation, canvas: Canvas) {
+
+        val wire = Path()
+
+        // input 1 to and 1
+        wire.moveTo(ca.ratioToSizeW(0.1),ca.ratioToSizeH(0.2))
+        wire.lineTo(ca.ratioToSizeW(0.18),ca.ratioToSizeH(0.2))
+        wire.lineTo(ca.ratioToSizeW(0.18),ca.ratioToSizeH(0.25))
+        wire.lineTo(ca.ratioToSizeW(0.26),ca.ratioToSizeH(0.25))
+        if(booleanInput[0]){
+            canvas.drawPath(wire,active_wire)
+        }else{
+            canvas.drawPath(wire,deactive_wire)
+        }
+
+        // input 2 to and 1
+        val wire2 = Path()
+        wire2.moveTo(ca.ratioToSizeW(0.1),ca.ratioToSizeH(0.35))
+        wire2.lineTo(ca.ratioToSizeW(0.18),ca.ratioToSizeH(0.35))
+        wire2.lineTo(ca.ratioToSizeW(0.18),ca.ratioToSizeH(0.3))
+        wire2.lineTo(ca.ratioToSizeW(0.26),ca.ratioToSizeH(0.3))
+        if(booleanInput[1]){
+            canvas.drawPath(wire2,active_wire)
+        }else{
+            canvas.drawPath(wire2,deactive_wire)
+        }
+
+        // and 1
+        canvas.drawRect(ca.ratioToSizeW(0.26),ca.ratioToSizeH(0.2),ca.ratioToSizeW(0.34),ca.ratioToSizeH(0.35),gate_frame)
+        canvas.save()
+        canvas.rotate(90f,ca.ratioToSizeW(0.27),ca.ratioToSizeH(0.21))
+        canvas.drawText("AND",ca.ratioToSizeW(0.27),ca.ratioToSizeH(0.21),text_painter)
+        canvas.restore()
+
+        // input 3 to not 1
+        val wire3 = Path()
+        wire3.moveTo(ca.ratioToSizeW(0.1),ca.ratioToSizeH(0.5))
+        wire3.lineTo(ca.ratioToSizeW(0.26),ca.ratioToSizeH(0.5))
+        if(booleanInput[2]){
+            canvas.drawPath(wire3,active_wire)
+        }else{
+            canvas.drawPath(wire3,deactive_wire)
+        }
+
+        // not 1
+        canvas.drawRect(ca.ratioToSizeW(0.26),ca.ratioToSizeH(0.425),ca.ratioToSizeW(0.34),ca.ratioToSizeH(0.575),gate_frame)
+        canvas.save()
+        canvas.rotate(90f,ca.ratioToSizeW(0.27),ca.ratioToSizeH(0.435))
+        canvas.drawText("NOT",ca.ratioToSizeW(0.27),ca.ratioToSizeH(0.435),text_painter)
+        canvas.restore()
+
+        // input 4 to or 1
+        val wire4 = Path()
+        wire4.moveTo(ca.ratioToSizeW(0.1),ca.ratioToSizeH(0.65))
+        wire4.lineTo(ca.ratioToSizeW(0.18),ca.ratioToSizeH(0.65))
+        wire4.lineTo(ca.ratioToSizeW(0.18),ca.ratioToSizeH(0.7))
+        wire4.lineTo(ca.ratioToSizeW(0.26),ca.ratioToSizeH(0.7))
+        if(booleanInput[3]){
+            canvas.drawPath(wire4,active_wire)
+        }else{
+            canvas.drawPath(wire4,deactive_wire)
+        }
+
+        // input 5 to or 1
+        val wire5 = Path()
+        wire5.moveTo(ca.ratioToSizeW(0.1),ca.ratioToSizeH(0.8))
+        wire5.lineTo(ca.ratioToSizeW(0.18),ca.ratioToSizeH(0.8))
+        wire5.lineTo(ca.ratioToSizeW(0.18),ca.ratioToSizeH(0.75))
+        wire5.lineTo(ca.ratioToSizeW(0.26),ca.ratioToSizeH(0.75))
+        if(booleanInput[4]){
+            canvas.drawPath(wire5,active_wire)
+        }else{
+            canvas.drawPath(wire5,deactive_wire)
+        }
+
+        // or 1
+        canvas.drawRect(ca.ratioToSizeW(0.26),ca.ratioToSizeH(0.65),ca.ratioToSizeW(0.34),ca.ratioToSizeH(0.8),gate_frame)
+        canvas.save()
+        canvas.rotate(90f,ca.ratioToSizeW(0.27),ca.ratioToSizeH(0.685))
+        canvas.drawText("OR",ca.ratioToSizeW(0.27),ca.ratioToSizeH(0.685),text_painter)
+        canvas.restore()
+
+        // and 1 to and 2
+        val wire6 = Path()
+        wire6.moveTo(ca.ratioToSizeW(0.34),ca.ratioToSizeH(0.275))
+        wire6.lineTo(ca.ratioToSizeW(0.42),ca.ratioToSizeH(0.275))
+        wire6.lineTo(ca.ratioToSizeW(0.42),ca.ratioToSizeH(0.3625))
+        wire6.lineTo(ca.ratioToSizeW(0.5),ca.ratioToSizeH(0.3625))
+        if(booleanInput[0] && booleanInput[1]){
+            canvas.drawPath(wire6,active_wire)
+        }else{
+            canvas.drawPath(wire6,deactive_wire)
+        }
+
+        // not 1 to and 2
+        val wire7 = Path()
+        wire7.moveTo(ca.ratioToSizeW(0.34),ca.ratioToSizeH(0.5))
+        wire7.lineTo(ca.ratioToSizeW(0.42),ca.ratioToSizeH(0.5))
+        wire7.lineTo(ca.ratioToSizeW(0.42),ca.ratioToSizeH(0.4125))
+        wire7.lineTo(ca.ratioToSizeW(0.5),ca.ratioToSizeH(0.4125))
+        if(!booleanInput[2]){
+            canvas.drawPath(wire7,active_wire)
+        }else{
+            canvas.drawPath(wire7,deactive_wire)
+        }
+
+        // and 2
+        canvas.drawRect(ca.ratioToSizeW(0.5),ca.ratioToSizeH(0.3125),ca.ratioToSizeW(0.58),ca.ratioToSizeH(0.4625),gate_frame)
+        canvas.save()
+        canvas.rotate(90f,ca.ratioToSizeW(0.51),ca.ratioToSizeH(0.3475))
+        canvas.drawText("OR",ca.ratioToSizeW(0.51),ca.ratioToSizeH(0.3475),text_painter)
+        canvas.restore()
+
+        // or 1 to not 2
+        val wire8 = Path()
+        wire8.moveTo(ca.ratioToSizeW(0.34),ca.ratioToSizeH(0.7))
+        wire8.lineTo(ca.ratioToSizeW(0.5),ca.ratioToSizeH(0.7))
+        if(booleanInput[3] || booleanInput[4]){
+            canvas.drawPath(wire8,active_wire)
+        }else{
+            canvas.drawPath(wire8,deactive_wire)
+        }
+
+        // not 2
+        canvas.drawRect(ca.ratioToSizeW(0.5),ca.ratioToSizeH(0.65),ca.ratioToSizeW(0.58),ca.ratioToSizeH(0.8),gate_frame)
+        canvas.save()
+        canvas.rotate(90f,ca.ratioToSizeW(0.51),ca.ratioToSizeH(0.66))
+        canvas.drawText("NOT",ca.ratioToSizeW(0.51),ca.ratioToSizeH(0.66),text_painter)
+        canvas.restore()
+
+        // or 1 to end 3
+        val wire9 = Path()
+        wire9.moveTo(ca.ratioToSizeW(0.34),ca.ratioToSizeH(0.75))
+        wire9.lineTo(ca.ratioToSizeW(0.42),ca.ratioToSizeH(0.75))
+        wire9.lineTo(ca.ratioToSizeW(0.42),ca.ratioToSizeH(0.85))
+        wire9.lineTo(ca.ratioToSizeW(0.9),ca.ratioToSizeH(0.85))
+        if(booleanInput[3] || booleanInput[4]){
+            canvas.drawPath(wire9,active_wire)
+            canvas.drawCircle(ca.ratioToSizeW(0.95),ca.ratioToSizeH(0.85),20f,active_io)
+        }else{
+            canvas.drawPath(wire9,deactive_wire)
+            canvas.drawCircle(ca.ratioToSizeW(0.95),ca.ratioToSizeH(0.85),20f,deactive_io)
+        }
+
+        // and 2 to end 1
+        val wire10 = Path()
+        wire10.moveTo(ca.ratioToSizeW(0.58),ca.ratioToSizeH(0.3625))
+        wire10.lineTo(ca.ratioToSizeW(0.9),ca.ratioToSizeH(0.3625))
+        if(booleanInput[0] && booleanInput[1] && !booleanInput[2]){
+            canvas.drawPath(wire10,active_wire)
+            canvas.drawCircle(ca.ratioToSizeW(0.95),ca.ratioToSizeH(0.3625),20f,active_io)
+        }else{
+            canvas.drawPath(wire10,deactive_wire)
+            canvas.drawCircle(ca.ratioToSizeW(0.95),ca.ratioToSizeH(0.3625),20f,deactive_io)
+        }
+
+        // and 2 to xor 1
+        val wire11 = Path()
+        wire11.moveTo(ca.ratioToSizeW(0.58),ca.ratioToSizeH(0.4125))
+        wire11.lineTo(ca.ratioToSizeW(0.66),ca.ratioToSizeH(0.4125))
+        wire11.lineTo(ca.ratioToSizeW(0.66),ca.ratioToSizeH(0.55))
+        wire11.lineTo(ca.ratioToSizeW(0.74),ca.ratioToSizeH(0.55))
+        if(booleanInput[0] && booleanInput[1] && !booleanInput[2]){
+            canvas.drawPath(wire11,active_wire)
+        }else{
+            canvas.drawPath(wire11,deactive_wire)
+        }
+
+        // not 2 to xor 1
+        val wire12 = Path()
+        wire12.moveTo(ca.ratioToSizeW(0.58),ca.ratioToSizeH(0.725))
+        wire12.lineTo(ca.ratioToSizeW(0.66),ca.ratioToSizeH(0.725))
+        wire12.lineTo(ca.ratioToSizeW(0.66),ca.ratioToSizeH(0.6))
+        wire12.lineTo(ca.ratioToSizeW(0.74),ca.ratioToSizeH(0.6))
+        if(!(booleanInput[3] || booleanInput[4])){
+            canvas.drawPath(wire12,active_wire)
+        }else{
+            canvas.drawPath(wire12,deactive_wire)
+        }
+
+        // xor 1
+        canvas.drawRect(ca.ratioToSizeW(0.74),ca.ratioToSizeH(0.5),ca.ratioToSizeW(0.82),ca.ratioToSizeH(0.65),gate_frame)
+        canvas.save()
+        canvas.rotate(90f,ca.ratioToSizeW(0.75),ca.ratioToSizeH(0.51))
+        canvas.drawText("XOR",ca.ratioToSizeW(0.75),ca.ratioToSizeH(0.51),text_painter)
+        canvas.restore()
+
+        // xor 1 to end 2
+        val wire13 = Path()
+        wire13.moveTo(ca.ratioToSizeW(0.82),ca.ratioToSizeH(0.575))
+        wire13.lineTo(ca.ratioToSizeW(0.9),ca.ratioToSizeH(0.575))
+        if((booleanInput[0] && booleanInput[1] && !booleanInput[2]) xor (!(booleanInput[3] || booleanInput[4]))){
+            canvas.drawPath(wire13,active_wire)
+            canvas.drawCircle(ca.ratioToSizeW(0.95),ca.ratioToSizeH(0.575),20f,active_io)
+        }else{
+            canvas.drawPath(wire13,deactive_wire)
+            canvas.drawCircle(ca.ratioToSizeW(0.95),ca.ratioToSizeH(0.575),20f,deactive_io)
+        }
+
+
+        for(i in 0..4){
+            if(booleanInput[i]){
+                canvas.drawCircle(ca.ratioToSizeW(0.05),ca.ratioToSizeH(0.2 + 0.15 * i),20f,active_io)
+            }else{
+                canvas.drawCircle(ca.ratioToSizeW(0.05),ca.ratioToSizeH(0.2 + 0.15 * i),20f,deactive_io)
+            }
+        }
+
+
+    }
+}
+
