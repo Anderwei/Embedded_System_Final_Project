@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="3dp">
 
     <LinearLayout
         android:layout_width="409dp"
@@ -15,25 +16,25 @@
             android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/expand_view_rounded_corner"
             android:text="TextView"
-            android:textSize="28sp"
             android:textColor="@color/black"
-            />
+            android:textSize="28sp" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/expendLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF">
 
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                tools:layout_editor_absoluteY="710dp"
-                android:textSize="16sp"
                 android:textColor="@color/black"
-                />
+                android:textSize="16sp"
+                tools:layout_editor_absoluteY="710dp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
