@@ -7,6 +7,9 @@ import android.graphics.Path
 import android.text.TextPaint
 import android.view.View
 import java.lang.Integer.min
+import java.lang.Math.random
+import java.math.BigInteger
+import java.security.MessageDigest
 
 
 val HAMILTON_PATH = 0
@@ -22,7 +25,7 @@ class CanvasAnimation(context: Context,algNum : Int) : View(context) {
     private var canvas_height:Int = 0
     private var currentAlg:Int = algNum
 
-    private var algs:ArrayList<AlgorithmHandler> = arrayListOf(HamiltonPathAlgHandler(),HamiltonShortestPathHandler(),CircuitProblemHandler())
+    private var algs:ArrayList<AlgorithmHandler> = arrayListOf(HamiltonPathAlgHandler(),HamiltonShortestPathHandler(),CircuitProblemHandler(),DehashingProblemHandler())
 
 
     init {
@@ -850,3 +853,72 @@ class CircuitProblemHandler:AlgorithmHandler(){
     }
 }
 
+class DehashingProblemHandler:AlgorithmHandler(){
+
+    private val hasher = MessageDigest.getInstance("MD5")
+    private val target_hashing:String = BigInteger(1, hasher.digest("such hashing,so random,wow".toByteArray())).toString(16).padStart(32, '0').uppercase()
+
+    private var guess_text = ""
+    private var output_text = ""
+
+    private val text_painter:Paint = Paint()
+    private val title_painter:Paint = Paint()
+
+    private val background1_painter:Paint = Paint()
+    private val background2_painter:Paint = Paint()
+    private val background3_painter:Paint = Paint()
+
+    private val charPool : List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
+
+    init{
+        text_painter.color = Color.BLACK
+        text_painter.textSize = (48).toFloat()
+        text_painter.isAntiAlias = true
+
+        title_painter.color = Color.BLACK
+        title_painter.textSize = (64).toFloat()
+        title_painter.isAntiAlias = true
+        title_painter.style = Paint.Style.FILL_AND_STROKE
+        title_painter.strokeWidth = 5f
+
+        background1_painter.color = Color.argb(90,252,186,3)
+        background1_painter.style = Paint.Style.FILL
+
+        background2_painter.color = Color.argb(90,3, 127, 252)
+        background2_painter.style = Paint.Style.FILL
+
+        background3_painter.color = Color.argb(90,3, 252, 111)
+        background3_painter.style = Paint.Style.FILL
+
+
+        guess_text = (1..15)
+                .map { i -> kotlin.random.Random.nextInt(0, charPool.size) }
+                .map(charPool::get)
+                .joinToString("")
+        output_text = BigInteger(1, hasher.digest(guess_text.toByteArray())).toString(16).padStart(32, '0').uppercase()
+    }
+
+    override fun drawing(ca: CanvasAnimation, canvas: Canvas) {
+
+        canvas.drawRect(ca.ratioToSizeW(0.05),ca.ratioToSizeH(0.02),ca.ratioToSizeW(0.95),ca.ratioToSizeH(0.2),background1_painter)
+        canvas.drawText("hashed text",ca.ratioToSizeW(0.355),ca.ratioToSizeH(0.1),title_painter)
+        canvas.drawText(target_hashing,ca.ratioToSizeW(0.075),ca.ratioToSizeH(0.17),text_painter)
+
+        canvas.drawRect(ca.ratioToSizeW(0.05),ca.ratioToSizeH(0.32),ca.ratioToSizeW(0.95),ca.ratioToSizeH(0.5),background2_painter)
+        canvas.drawText("guess text",ca.ratioToSizeW(0.355),ca.ratioToSizeH(0.4),title_painter)
+        canvas.drawText(guess_text,ca.ratioToSizeW(0.075),ca.ratioToSizeH(0.47),text_painter)
+
+
+        canvas.drawRect(ca.ratioToSizeW(0.05),ca.ratioToSizeH(0.52),ca.ratioToSizeW(0.95),ca.ratioToSizeH(0.7),background3_painter)
+        canvas.drawText("output hash",ca.ratioToSizeW(0.355),ca.ratioToSizeH(0.6),title_painter)
+        canvas.drawText(output_text,ca.ratioToSizeW(0.075),ca.ratioToSizeH(0.67),text_painter)
+    }
+
+    override fun nextState() {
+        guess_text = (1..15)
+                .map { i -> kotlin.random.Random.nextInt(0, charPool.size) }
+                .map(charPool::get)
+                .joinToString("")
+        output_text = BigInteger(1, hasher.digest(guess_text.toByteArray())).toString(16).padStart(32, '0').uppercase()
+    }
+}
