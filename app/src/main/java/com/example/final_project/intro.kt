@@ -128,5 +128,11 @@ class intro : AppCompatActivity() {
             npList.add(temp2)
         }
 
+    fun openBottomSheet(view: View){
+        if(bottom_sheet_behavior.state == BottomSheetBehavior.STATE_COLLAPSED){
+            bottom_sheet_behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        }else{
+            bottom_sheet_behavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
     }
 }
