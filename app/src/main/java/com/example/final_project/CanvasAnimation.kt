@@ -28,8 +28,9 @@ class CanvasAnimation(context: Context,algNum : Int) : View(context) {
     init {
         val task = Runnable{
             while(true){
+                nextFrame()
                 invalidate()
-                Thread.sleep(100)
+                Thread.sleep(500)
             }
         }
 
