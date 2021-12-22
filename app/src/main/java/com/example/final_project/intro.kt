@@ -2,6 +2,7 @@ package com.example.final_project
 
 import android.content.Intent
 import android.os.Bundle
+import android.transition.Fade
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -11,15 +12,18 @@ import java.util.ArrayList
 
 data  class Item(var img: Int,var t : String) {}
 
-class intro : AppCompatActivity(){
+class intro : AppCompatActivity() {
     var isBottomSheetLoad = true
-    lateinit var OptionImg : Array<Int>
-    lateinit var OptionText : Array<String>
-    lateinit var testList : ArrayList<Item>
+    lateinit var OptionImg: Array<Int>
+    lateinit var OptionText: Array<String>
+    lateinit var testList: ArrayList<Item>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.intro_layout)
+
+        init()
+
         OptionImg = arrayOf(
                 R.drawable.pathfinding,
                 R.drawable.optimization,
@@ -34,10 +38,11 @@ class intro : AppCompatActivity(){
 
         testList = arrayListOf<Item>()
 
-        for(i in 0..2){
-            val temp = Item(OptionImg[i],OptionText[i])
+        for (i in 0..2) {
+            val temp = Item(OptionImg[i], OptionText[i])
             testList.add(temp)
         }
+
 
         if (isBottomSheetLoad) {
 
@@ -49,19 +54,21 @@ class intro : AppCompatActivity(){
             recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
             val adapter = MyAdapter(testList)
             recyclerView.adapter = adapter
-            adapter.setOnItemClickListener(object : MyAdapter.onItemClickListener{
-                override fun onItemClick(position: Int){
-                    val intent = Intent(this@intro,showActivity::class.java)
-                    intent.putExtra("title",testList[position % 3].t)
-                    intent.putExtra("img" ,testList[position % 3].img)
+            adapter.setOnItemClickListener(object : MyAdapter.onItemClickListener {
+                override fun onItemClick(position: Int) {
+                    val intent = Intent(this@intro, showActivity::class.java)
+                    intent.putExtra("title", testList[position % 3].t)
+                    intent.putExtra("img", testList[position % 3].img)
                     startActivity(intent)
                 }
             })
         }
     }
 
-//    override fun onStart() {
-//        super.onStart()
-//        overridePendingTransition(R.anim.main_out,R.anim.intro_start)
-//    }
+    private fun init() {
+        val fadeTransition = Fade()
+        fadeTransition.duration = 1500
+        window.enterTransition = fadeTransition
+        window.exitTransition = fadeTransition
+    }
 }
