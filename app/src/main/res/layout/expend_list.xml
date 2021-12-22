@@ -15,7 +15,10 @@
             android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="TextView"
+            android:textSize="28sp"
+            android:textColor="@color/black"
+            />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/expendLayout"
@@ -27,7 +30,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                tools:layout_editor_absoluteY="710dp" />
+                tools:layout_editor_absoluteY="710dp"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
