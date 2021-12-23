@@ -51,7 +51,6 @@ class MyViewHolder(itemView: View, listener: MyAdapter.onItemClickListener) : Re
     var imageView : ImageView = itemView.findViewById(R.id.imageView)
 
     init{
-//        textView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
         itemView.setOnClickListener{
             listener.onItemClick(adapterPosition)
         }

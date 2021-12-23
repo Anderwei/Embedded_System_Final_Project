@@ -1,26 +1,20 @@
 package com.example.final_project
 
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.transition.Explode
 import android.transition.Fade
-import android.transition.Visibility
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.util.ArrayList
-import android.text.method.ScrollingMovementMethod
 import android.view.View
 import android.widget.ImageView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 
 
 data class Item(var img: Int,var t : String) {}
@@ -48,13 +42,13 @@ class intro : AppCompatActivity() {
 
 
             // Dynamic load bottom sheet
-            var inf: LayoutInflater = LayoutInflater.from(this)
-            findViewById<ViewGroup>(R.id.intro_Screen).addView(inf.inflate(R.layout.bottom_sheet, findViewById<ViewGroup>(R.id.intro_Screen), false))
+            val inf: LayoutInflater = LayoutInflater.from(this)
+            findViewById<ViewGroup>(R.id.intro_Screen).addView(inf.inflate(R.layout.bottom_sheet, findViewById(R.id.intro_Screen), false))
 
 
 
             //animation option
-            val recyclerView: RecyclerView = findViewById<RecyclerView>(R.id.my_list)
+            val recyclerView: RecyclerView = findViewById(R.id.my_list)
             recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
             val adapter = MyAdapter(dataList)
             recyclerView.adapter = adapter
@@ -64,7 +58,7 @@ class intro : AppCompatActivity() {
                     findViewById<LinearLayout>(R.id.constraintLayout).removeAllViews()
 
                     if(position % 5 == 0){
-                        var rv:RecyclerView = RecyclerView(applicationContext)
+                        val rv = RecyclerView(applicationContext)
                         findViewById<LinearLayout>(R.id.constraintLayout).addView(rv,0)
                         rv.layoutManager = LinearLayoutManager(applicationContext,LinearLayoutManager.VERTICAL,false)
                         val adapterNP = MyExpendAdapter(npList)
@@ -72,11 +66,11 @@ class intro : AppCompatActivity() {
                     }
 
                     if(position % 5 == 1){
-                        val ca:CanvasAnimation = CanvasAnimation(applicationContext,0)
+                        val ca = CanvasAnimation(applicationContext,0)
                         ca.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,(400 * applicationContext.resources.displayMetrics.density).toInt())
                         findViewById<LinearLayout>(R.id.constraintLayout).addView(ca)
 
-                        val tv:TextView = TextView(applicationContext)
+                        val tv = TextView(applicationContext)
                         findViewById<LinearLayout>(R.id.constraintLayout).addView(tv)
                         tv.text = problemContent[0]
                         tv.setTextColor(Color.rgb(255,255,255))
@@ -84,11 +78,11 @@ class intro : AppCompatActivity() {
                     }
 
                     if(position % 5 == 2){
-                        val ca:CanvasAnimation = CanvasAnimation(applicationContext,1)
+                        val ca = CanvasAnimation(applicationContext,1)
                         ca.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,(400 * applicationContext.resources.displayMetrics.density).toInt())
                         findViewById<LinearLayout>(R.id.constraintLayout).addView(ca)
 
-                        val tv:TextView = TextView(applicationContext)
+                        val tv = TextView(applicationContext)
                         findViewById<LinearLayout>(R.id.constraintLayout).addView(tv)
                         tv.text = problemContent[1]
                         tv.setTextColor(Color.rgb(255,255,255))
@@ -96,11 +90,11 @@ class intro : AppCompatActivity() {
                     }
 
                     if(position % 5 == 3){
-                        val ca:CanvasAnimation = CanvasAnimation(applicationContext,2)
+                        val ca = CanvasAnimation(applicationContext,2)
                         ca.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,(400 * applicationContext.resources.displayMetrics.density).toInt())
                         findViewById<LinearLayout>(R.id.constraintLayout).addView(ca)
 
-                        val tv:TextView = TextView(applicationContext)
+                        val tv = TextView(applicationContext)
                         findViewById<LinearLayout>(R.id.constraintLayout).addView(tv)
                         tv.text = problemContent[2]
                         tv.setTextColor(Color.rgb(255,255,255))
@@ -221,8 +215,8 @@ class intro : AppCompatActivity() {
 
         )
 
-        dataList = arrayListOf<Item>()
-        npList = arrayListOf<NP_Item>()
+        dataList = arrayListOf()
+        npList = arrayListOf()
 
         for(i in NpListTitle.indices){
             npList.add(NP_Item(NpListTitle[i], npListContent[i]))

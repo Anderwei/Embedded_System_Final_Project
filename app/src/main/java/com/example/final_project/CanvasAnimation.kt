@@ -7,14 +7,8 @@ import android.graphics.Path
 import android.text.TextPaint
 import android.view.View
 import java.lang.Integer.min
-import java.lang.Math.random
 import java.math.BigInteger
 import java.security.MessageDigest
-
-
-val HAMILTON_PATH = 0
-val HAMILTON_SHORTEST_PATH = 1
-val CIRCUIT_PROBLEM = 2
 
 
 class CanvasAnimation(context: Context,algNum : Int) : View(context) {
