@@ -25,19 +25,21 @@
             android:id="@+id/expendLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FFFFFF">
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="30dp"
+            android:background="#50000000">
 
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:paddingRight="30dp"
                 android:paddingLeft="5dp"
-                tools:layout_editor_absoluteY="710dp"
-                />
+                android:paddingRight="30dp"
+                android:text="TextView"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                tools:layout_editor_absoluteY="710dp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
