@@ -15,6 +15,9 @@ import java.util.ArrayList
 import android.view.View
 import android.widget.ImageView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import pl.droidsonroids.gif.GifDrawable
+import pl.droidsonroids.gif.GifImageView
+import java.lang.Thread.sleep
 
 
 data class Item(var img: Int,var t : String) {}
@@ -54,6 +57,7 @@ class intro : AppCompatActivity() {
             recyclerView.adapter = adapter
             adapter.setOnItemClickListener(object : MyAdapter.onItemClickListener {
                 override fun onItemClick(position: Int) {
+                    bottom_sheet_behavior.state = BottomSheetBehavior.STATE_COLLAPSED
 
                     findViewById<LinearLayout>(R.id.constraintLayout).removeAllViews()
 
@@ -133,6 +137,21 @@ class intro : AppCompatActivity() {
                 override fun onSlide(bottomSheet: View, slideOffset: Float) {
                 }
             })
+            val task = Runnable{
+                Thread.sleep(1500)
+                runOnUiThread(object:Runnable{
+
+                    override fun run() {
+                        bottom_sheet_behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        findViewById<ImageView>(R.id.imageView3).animate().rotation((180).toFloat()).start()
+                    }
+                })
+            }
+
+            val td = Thread(task)
+            td.start()
+
+
         }
     }
 
