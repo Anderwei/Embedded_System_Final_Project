@@ -101,6 +101,19 @@ class intro : AppCompatActivity() {
                         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP,(18).toFloat())
                     }
 
+                    if(position % 5 == 4){
+                        val gif =  GifImageView(applicationContext);
+                        gif.setImageResource(R.drawable.chess)
+                        gif.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,(400 * applicationContext.resources.displayMetrics.density).toInt())
+                        findViewById<LinearLayout>(R.id.constraintLayout).addView(gif)
+
+                        val tv = TextView(applicationContext)
+                        findViewById<LinearLayout>(R.id.constraintLayout).addView(tv)
+                        tv.text = problemContent[3]
+                        tv.setTextColor(Color.rgb(255,255,255))
+                        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP,(18).toFloat())
+                    }
+
                 }
             })
 
@@ -144,7 +157,7 @@ class intro : AppCompatActivity() {
                 "PathFinding - NP",
                 "PathFinding - NP Hardness",
                 "Circuit",
-                "Optimization",
+                "Chess",
         )
 
         NpListTitle = arrayOf(
@@ -212,13 +225,19 @@ class intro : AppCompatActivity() {
                     "已有許多的演算法可以有效率的處理這個問題\n" +
                     "此問題也是最早被證明為 NP-Complete 的問題",
 
-
+                    "西洋棋作為一個古老的棋盤遊戲\n" +
+                    "自古便有許多人希望能找到一個必勝的路徑\n" +
+                    "因此便衍生出了一個著名的NP-Hard問題\n" +
+                    "「對於現有的棋面是否存在著一個步驟，使黑/白方必勝」\n" +
+                    "近年來雖然透過許多方法逼近最佳解\n" +
+                    "但對於這個題目最直接的解\n" +
+                    "仍是世紀上的一大難題"
         )
 
         dataList = arrayListOf()
         npList = arrayListOf()
 
-        for(i in NpListTitle.indices){
+        for(i in NpListTitle.indices) {
             npList.add(NP_Item(NpListTitle[i], npListContent[i]))
         }
 
