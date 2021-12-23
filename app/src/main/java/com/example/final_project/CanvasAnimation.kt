@@ -744,8 +744,8 @@ class CircuitProblemHandler:AlgorithmHandler(){
         // and 2
         canvas.drawRect(ca.ratioToSizeW(0.5),ca.ratioToSizeH(0.3125),ca.ratioToSizeW(0.58),ca.ratioToSizeH(0.4625),gate_frame)
         canvas.save()
-        canvas.rotate(90f,ca.ratioToSizeW(0.51),ca.ratioToSizeH(0.3475))
-        canvas.drawText("OR",ca.ratioToSizeW(0.51),ca.ratioToSizeH(0.3475),text_painter)
+        canvas.rotate(90f,ca.ratioToSizeW(0.51),ca.ratioToSizeH(0.3225))
+        canvas.drawText("AND",ca.ratioToSizeW(0.51),ca.ratioToSizeH(0.3225),text_painter)
         canvas.restore()
 
         // or 1 to not 2
